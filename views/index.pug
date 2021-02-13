@@ -64,7 +64,15 @@ block content
           var amount = amountParts[0] + '.<span class="decimal">' + amountParts[1] + '</span>';
           var timestamp = data[5]; //variables for better readability
           $("td:eq(0)", row).html('<a href="/block/' + blockhash + '">' + blockindex + '</a>');
-          $("td:eq(1)", row).html('<a href="/tx/' + txhash + '">' + txhash + '</a>').addClass("d-none d-md-none d-lg-table-cell text-center");
+          if ($(window).width() <= 1440) {
+            var str_len = txhash.length;
+            var prefix = txhash.substring(0, 8);
+            var suffix = txhash.substring(str_len, str_len - 8);
+            var txhash_short = prefix + "......" + suffix;
+            $("td:eq(1)", row).html('<a href="/tx/' + txhash + '">' + txhash_short + '</a>').addClass("d-none d-md-none d-lg-table-cell text-center hidden-xs");
+          } else {
+            $("td:eq(1)", row).html('<a href="/tx/' + txhash + '">' + txhash + '</a>').addClass("d-none d-md-none d-lg-table-cell text-center hidden-xs");
+          }
           $("td:eq(2)", row).html(outputs).addClass("d-none d-md-none d-lg-table-cell text-center");
           $("td:eq(3)", row).html(amount);
           $("td:eq(4)", row).html(timestamp);          

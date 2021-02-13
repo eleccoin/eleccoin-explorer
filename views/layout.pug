@@ -29,7 +29,8 @@ html
         function update_stats(){
           $.ajax({url: '/ext/summary', success: function(json){
             var supplyString = json.data[0].supply;
-            var diffString = json.data[0].difficulty;
+            var diffString = parseFloat(json.data[0].difficulty).toFixed(4);
+            var diffStringMobile = parseFloat(json.data[0].difficulty).toFixed(4);
             var hashrateString = json.data[0].hashrate;
             if (!isNaN(json.data[0].difficulty)) {
               diffString = parseFloat(json.data[0].difficulty).toFixed(2);
@@ -41,9 +42,12 @@ html
               hashrateString = parseFloat(json.data[0].hashrate).toLocaleString('en');
             }
             $("#supply").text(supplyString);
+            $("#supply-mobile").text(parseInt(parseFloat(json.data[0].supply).toFixed(0)).toLocaleString('en'));
             $("#difficulty").text(diffString);
+            $("#difficulty-mobile").text(parseFloat(json.data[0].difficulty).toFixed(4));
             $("#difficultyHybrid").text(json.data[0].difficultyHybrid);
             $("#hashrate").text(hashrateString);
+            $("#hashrate-mobile").text(parseFloat(json.data[0].hashrate).toLocaleString('en'));
             $("#lastPrice").text(parseFloat(json.data[0].lastPrice).toFixed(8) + ' #{settings.markets.exchange}'.toUpperCase());
             $("#marketCap").text((parseFloat(json.data[0].lastPrice).toFixed(8) * parseInt(parseFloat(json.data[0].supply).toFixed(0))).toLocaleString('en') + ' #{settings.markets.exchange}'.toUpperCase());
             $("#lblConnections").text(json.data[0].connections + ' connections');
@@ -122,8 +126,11 @@ html
         button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbar-collapse')
           span.navbar-toggler-icon 
         a.navbar-brand(href='/')
+          img(src=settings.logo, style='width:35px;height:35px;')
+          | &ensp;
           if typeof settings.headerlogo !== "undefined" && settings.headerlogo && settings.headerlogo.length > 1
             img(src=settings.headerlogo, style='width:153px;height:45px;')
+            | #{settings.title}
           else
             =settings.title
       .collapse.navbar-collapse(id='navbar-collapse')
@@ -165,7 +172,7 @@ html
     .col-md-12
       .row.text-center.d-flex.justify-content-center
         .col-md-2
-          .card.card-default.d-none.d-md-block.d-block
+          .card.card-default.d-none.d-md-block
             .card-header
               if settings.nethash_units == 'K'
                 strong #{settings.locale.network} (KH/s)
@@ -189,7 +196,7 @@ html
                 else
                   label#hashrate -
         .col-md-2
-          .card.card-default.d-none.d-md-block.d-block
+          .card.card-default.d-none.d-md-block
             .card-header
               strong #{settings.locale.difficulty}
             .card-body
@@ -201,11 +208,11 @@ html
                   label#difficultyHybrid -
                 else
                   label#difficulty -
-        
-        .col-md-2.col-sm-12
+
+        .col-md-2.col-sm-12.d-none
             img(src=settings.logo, style='margin-top:-15px;height:128px;')
         .col-md-2
-          .card.card-default.d-none.d-md-block.d-block
+          .card.card-default.d-none.d-md-block
             .card-header
               strong #{settings.locale.ex_supply} (#{settings.symbol})
             .card-body
@@ -222,8 +229,8 @@ html
                   label ( 
                   label#marketCap - 
                   label )
-        .col-md-2
-          .card.card-default.d-none.d-md-block.d-block
+        .col-md-2.d-none
+          .card.card-default
             if settings.index.show_market_cap != true || settings.index.show_market_cap_over_price != true
               .card-header
                 strong #{settings.markets.exchange} Price
@@ -241,6 +248,31 @@ html
               strong Market Cap
             .card-body
               label#marketCap -
+        .col-sm-12
+          .card.card-default.d-md-none.d-lg-none
+            .card-header
+              strong Chain Information
+            .card-body
+              if settings.nethash_units == 'K'
+                strong #{settings.locale.network} (KH/s)
+              else if settings.nethash_units == 'M'
+                strong #{settings.locale.network} (MH/s)
+              else if settings.nethash_units == 'G'
+                strong #{settings.locale.network} (GH/s)
+              else if settings.nethash_units == 'T'
+                strong #{settings.locale.network} (TH/s)
+              else if settings.nethash_units == 'P'
+                strong #{settings.locale.network} (PH/s)
+              else if settings.nethash_units == 'H'
+                strong #{settings.locale.network} (H/s)
+              | &ensp;&ensp;
+              label#hashrate-mobile
+              <br>
+              strong #{settings.locale.difficulty}&ensp;&ensp;
+              label#difficulty-mobile
+              <br>
+              strong #{settings.locale.ex_supply} (#{settings.symbol})&ensp;&ensp;
+              label#supply-mobile
 
       .row.text-center(style='margin-top:10px;margin-bottom:20px;')
         form.form-inline.col-12.d-flex.justify-content-center(method='post', action='/search')
