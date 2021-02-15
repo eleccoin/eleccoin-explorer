@@ -52,6 +52,8 @@ html
             $("#marketCap").text((parseFloat(json.data[0].lastPrice).toFixed(8) * parseInt(parseFloat(json.data[0].supply).toFixed(0))).toLocaleString('en') + ' #{settings.markets.exchange}'.toUpperCase());
             $("#lblConnections").text(json.data[0].connections + ' connections');
             $("#lblBlockcount").text(json.data[0].blockcount + ' blocks');
+            $("#lblConnectionsMobile").text(json.data[0].connections + ' connections');
+            $("#lblBlockcountMobile").text(json.data[0].blockcount + ' blocks');
             $("#lblX1").text(' ');
           }});
         }
@@ -300,12 +302,19 @@ html
               li.pull-left
                 a#youtube-icon.nav-link.social-link(href="https://www.youtube.com/channel/"+settings.youtube, target='_blank')
                   span.glyphicon.fa.fa-youtube
-      .col-md-4.navbar-nav
+      .col-md-12.navbar-nav.d-sm-none
+        ul.nav.justify-content-center
+          li.text-center(style='margin-left:1vim;margin-right:1vim;')
+            p(style='font-size:4vmin')
+              label#lblBlockcount.badge.badge-pill.nav-link
+              label#lblConnections.badge.badge-pill.nav-link
+              a.nav-link.poweredby(href='https://github.com/eleccoin/explorer', target='_blank') Eleccoin Explorer v#{settings.eleccoin_version}
+      .col-md-4.navbar-nav.d-none.d-sm-block
         ul.nav.justify-content-center
           li.text-center(style='margin-left:80px;margin-right:80px;')
             p(style='')
               a.nav-link.poweredby(href='https://github.com/eleccoin/explorer', target='_blank') Powered by Eleccoin Explorer v#{settings.eleccoin_version}
-      .col-md-4.navbar-nav
+      .col-md-4.navbar-nav.d-none.d-sm-block
         ui.nav.justify-content-end
-          label#lblBlockcount.badge.badge-pill.nav-link
-          label#lblConnections.badge.badge-pill.nav-link
+          label#lblBlockcountMobile.badge.badge-pill.nav-link
+          label#lblConnectionsMobile.badge.badge-pill.nav-link

@@ -1,4 +1,4 @@
-Eleccoin Explorer - 1.1.0
+Eleccoin Explorer - 1.2.0
 ================
 
 An open source block explorer for Eleccoin written in node.js.
