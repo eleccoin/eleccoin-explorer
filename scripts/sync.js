@@ -179,14 +179,14 @@ is_locked(function (exists) {
                     });
                   });
                 } else if (mode == 'check') {
-                  db.update_tx_db(settings.coin, 1, stats.count, settings.check_timeout, function(){
+                  db.update_tx_db(settings.coin, 1, stats.count, settings.check_timeout, mode, function(){
                     db.get_stats(settings.coin, function(nstats){
                       console.log('check complete (block: %s)', nstats.last);
                       exit();
                     });
                   });
                 } else if (mode == 'update') {
-                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.update_timeout, function(){
+                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.update_timeout, mode, function(){
                     db.update_richlist('received', function(){
                       db.update_richlist('balance', function(){
                         db.get_stats(settings.coin, function(nstats){
@@ -198,7 +198,7 @@ is_locked(function (exists) {
                   });
                 } else if (mode == 'reindex-rich') {
                   console.log('update started');
-                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.check_timeout, function(){
+                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.check_timeout, mode, function(){
                     console.log('update finished');
                     db.check_richlist(settings.coin, function(exists){
                       if (exists == true) {
