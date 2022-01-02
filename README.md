@@ -1,35 +1,43 @@
-Eleccoin Explorer - 1.2.0
+Eleccoin Explorer - 1.3.0 (beta)
 ================
 
 An open source block explorer for Eleccoin written in node.js.
 
 ### Requires
 
-*  node.js >= 12.14.0
-*  mongodb 4.2.x
-*  *coind
+*  node.js >= 16.13.0
+*  mongodb >= 5.0.x
+*  coind of Eleccoin Core
 
 ### Create database
 
 Enter MongoDB cli:
 
-    $ mongo
+```
+$ mongosh
+```
 
 Create databse:
 
-    > use explorerdb
+```
+> use explorerdb
+```
 
 Create user with read/write access:
 
-    > db.createUser( { user: "eleccoin", pwd: "3xp!0reR", roles: [ "readWrite" ] } )
+```
+> db.createUser( { user: "eleccoin", pwd: "3xp!0reR", roles: [ "readWrite" ] } )
+```
 
 *Note: If you're using mongo shell 4.2.x, use the following to create your user:
 
-    > db.addUser( { user: "username", pwd: "password", roles: [ "readWrite"] })
+```
+> db.addUser( { user: "username", pwd: "password", roles: [ "readWrite"] })
+```
 
 ### Get the source
 
-    git clone https://github.com/eleccoin/explorer explorer
+    git clone https://github.com/eleccoin/eleccoin-explorer.git eleccoin-explorer
 
 ### Install node modules
 
@@ -60,16 +68,16 @@ To stop the cluster you can use
 sync.js (located in scripts/) is used for updating the local databases. This script must be called from the explorers root directory.
 
     Usage: node scripts/sync.js [database] [mode]
-
+    
     database: (required)
     index [mode] Main index: coin info/stats, transactions & addresses
     market       Market data: summaries, orderbooks, trade history & chartdata
-
+    
     mode: (required for index database only)
     update       Updates index from last sync to current block
     check        checks index for (and adds) any missing transactions/addresses
     reindex      Clears index then resyncs from genesis to current block
-
+    
     notes:
     * 'current block' is the latest created block when script is executed.
     * The market database only supports (& defaults to) reindex mode.
@@ -92,7 +100,7 @@ sync.js (located in scripts/) is used for updating the local databases. This scr
 Eleccoin Explorer is intended to be generic, so it can be used with any wallet following the usual standards. The wallet must be running with atleast the following flags
 
     -daemon -txindex
-    
+
 ### Security
 
 Ensure mongodb is not exposed to the outside world via your mongo config or a firewall to prevent outside tampering of the indexed chain data. 
