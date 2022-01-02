@@ -65,7 +65,7 @@ if (process.argv[2] == 'index') {
 function create_lock(cb) {
   if ( database == 'index' ) {
     var fname = './tmp/' + database + '.pid';
-    fs.appendFile(fname, process.pid, function (err) {
+    fs.appendFile(fname, process.pid.toString(), function (err) {
       if (err) {
         console.log("Error: unable to create %s", fname);
         process.exit(1);
@@ -128,7 +128,7 @@ is_locked(function (exists) {
     process.exit(0);
   } else {
     create_lock(function (){
-      console.log("script launched with pid: " + process.pid);
+      console.log("script launched with pid: " + process.pid.toString());
       mongoose.connect(dbString, function(err) {
         if (err) {
           console.log('Unable to connect to database: %s', dbString);
@@ -179,14 +179,14 @@ is_locked(function (exists) {
                     });
                   });
                 } else if (mode == 'check') {
-                  db.update_tx_db(settings.coin, 1, stats.count, settings.check_timeout, function(){
+                  db.update_tx_db(settings.coin, 1, stats.count, settings.check_timeout, mode, function(){
                     db.get_stats(settings.coin, function(nstats){
                       console.log('check complete (block: %s)', nstats.last);
                       exit();
                     });
                   });
                 } else if (mode == 'update') {
-                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.update_timeout, function(){
+                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.update_timeout, mode, function(){
                     db.update_richlist('received', function(){
                       db.update_richlist('balance', function(){
                         db.get_stats(settings.coin, function(nstats){
@@ -198,7 +198,7 @@ is_locked(function (exists) {
                   });
                 } else if (mode == 'reindex-rich') {
                   console.log('update started');
-                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.check_timeout, function(){
+                  db.update_tx_db(settings.coin, stats.last, stats.count, settings.check_timeout, mode, function(){
                     console.log('update finished');
                     db.check_richlist(settings.coin, function(exists){
                       if (exists == true) {
