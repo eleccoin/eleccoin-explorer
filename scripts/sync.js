@@ -65,7 +65,7 @@ if (process.argv[2] == 'index') {
 function create_lock(cb) {
   if ( database == 'index' ) {
     var fname = './tmp/' + database + '.pid';
-    fs.appendFile(fname, process.pid, function (err) {
+    fs.appendFile(fname, process.pid.toString(), function (err) {
       if (err) {
         console.log("Error: unable to create %s", fname);
         process.exit(1);
@@ -128,7 +128,7 @@ is_locked(function (exists) {
     process.exit(0);
   } else {
     create_lock(function (){
-      console.log("script launched with pid: " + process.pid);
+      console.log("script launched with pid: " + process.pid.toString());
       mongoose.connect(dbString, function(err) {
         if (err) {
           console.log('Unable to connect to database: %s', dbString);
